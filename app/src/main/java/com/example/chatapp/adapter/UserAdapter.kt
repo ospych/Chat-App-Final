@@ -3,6 +3,7 @@ package com.example.chatapp.adapter
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,14 +32,25 @@ class UserAdapter(private val context: Context, private val userList: ArrayList<
         val user = userList[position]
 
         holder.txtUserName.text = user.userName
-
-        val storage = FirebaseStorage.getInstance()
-        val gsReference = storage.getReferenceFromUrl(user.profileImage)
-        gsReference.downloadUrl.addOnSuccessListener { uri ->
-            Glide.with(context)
-                    .load(uri)
+        try {
+            val storage = FirebaseStorage.getInstance()
+            val gsReference = storage.getReferenceFromUrl(user.profileImage)
+            if (user.profileImage != " ") {
+                gsReference.downloadUrl.addOnSuccessListener { uri ->
+                    Glide.with(context)
+                        .load(uri)
+                        .into(holder.imgUser)
+                }
+            } else {
+                Glide.with(context)
+                    .load(R.drawable.ic_user)
                     .into(holder.imgUser)
+            }
+        } catch (e: Exception) {
+            Log.e("TAG", e.toString())
         }
+
+
 
         holder.layoutUser.setOnClickListener {
             val intent = Intent(context, ChatActivity::class.java)

@@ -80,10 +80,10 @@ class UsersActivity : AppCompatActivity() {
                     userList.clear()
                     val currentUser = snapshot.getValue(User::class.java)
                     
-                    if (currentUser!!.profileImage != "") {
-                        loadPhoto(currentUser.profileImage)
+                    if (currentUser!!.profileImage == " ") {
+                        Glide.with(this@UsersActivity).load(R.drawable.ic_user).into(userImage)
                     } else {
-                        Toast.makeText(this@UsersActivity, "Image wrong", Toast.LENGTH_SHORT).show()
+                        loadPhoto(currentUser.profileImage)
                     }
 
                     for (dataSnapShot: DataSnapshot in snapshot.children) {
